@@ -1,0 +1,60 @@
+- Design a product review system very similar to what you see for products on Amazon.
+- Design a data store. Use any of the databases you are comfortable with. Explain the reasoning behind the design choices.
+- Create a REST API for adding, updating, deleting, viewing the reviews.
+- API should support viewing reviews customer wise and product wise.
+Assume that the code will run on a server. Assume that this work is a part of a web app that
+needs to be built further by multiple development teams and will be maintained and evolved for several years in the future. 
+
+In addition to these, make any assumptions necessary, but discuss those assumptions explicitly. 
+
+Use any programming language and library of your choice, but we suggest you use the language you are most comfortable with.
+
+Write unit tests for your code.
+
+
+
+user
+- id
+- name
+- email
+- mobile
+
+product
+- id
+- name
+- description
+
+images
+- id
+- review_id
+- image_uri(path/uri)
+
+reviews
+- id
+- product_id (foreign key)
+- user_id (foreign key)
+- rating (integer)
+- description (text)
+- comment (text)
+- upvotes (int)
+- downvotes (int)
+- date_created_timestamp (datetime)
+- last_updated_timestamp (datetime)
+
+votes -> 
+- review_id
+- user_id
+- vote (1, -1)
+
+
+review_comments
+- id
+- review_id
+- user_id
+- comment
+- created_timestamp
+
+
+1. create - /add/review
+ - user_id, product_id, rating, description, comment, images_url[]
+

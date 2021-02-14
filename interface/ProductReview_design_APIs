@@ -1,0 +1,137 @@
+# Sqlalchemy
+
+def db_session(func):
+    db.connect()
+    def fun(kwargs):
+
+        return func(kwargs)
+
+    return func
+
+
+from db import user, review, images, product, votes, review_comments
+import sdb_session
+import requests
+from json_schema import validate
+import marshmallow
+
+
+json_schema_review - {
+    rating: Integer, 0<=val<=5, msg=:rating is not appropriate,
+    description: String, len(val) < 256, msg="description too long",
+}
+
+
+def create_review(user_id, product_id, rating, description, comment):
+    rev = review()
+    rev.user_id = user_id
+    rev.product_id = product_id,
+
+    try:
+        session.add(rev)
+        session.commit
+    except SqlException as ex:
+        return False, ex.msg
+    except SqlUniqueexception as ex:
+        return False ex.msg
+    except Exception as ex:
+        return False as ex.msg
+
+    return True, rev.id
+
+def create_review_images(review_id, images):
+    for img in images:
+        rev_img = images()
+        rev_img.review_id
+        rev_image = img
+        try:
+            session.add(rev_image)
+        except Exception as ex:
+            return ex.msg
+        
+    session.commit()
+
+
+class Review():
+    @db_session
+    def post(self):
+        data = requests.get_json() # user_id, product_id, rating, description, comment, images_url[]
+        res = validate(data)
+        if not res.status:
+            return res.msg
+
+        status, review_id = create_review(user_id, product_id, rating, description, comment)
+        if not status:
+            return review_id
+
+        create_review_images(review_id, images_url)
+
+        return 200, True
+
+
+def get_images(review_id):
+    images = db_session.query(images).filter(images.review_id==review_id)
+    return [img.image_url for img in images]
+
+
+@cache
+def get_votes(review_id):
+    votes = db_session.query(votes).filter(votes.review_id == review_id).all()
+    upvotes = 0
+    for vote in votes:
+        if vote.vote == 1:
+            upvote += 1
+
+    return upvotes, len(votes)-upvotes
+
+
+cache[votes][review_id][upvote][downvotes]
+
+upvoted => votes => cache
+downvotes => votes => cache
+
+
+
+
+@db_session
+def get_reviews(self, product_id):
+    req_json = request.get_json()
+    offset = 1
+    limit = 100
+    if offset in req_json:
+        offset = req_json['offset']
+
+    reviews_count = db_session.query(reviews).filter(reviews.product_id==product_id).count()
+    reviews = db_session.query(reviews).filter(reviews.product_id==product_id).limit(limit).offset(offset*limit)all()
+    review_list = []
+    for rev in reviews:
+        data = marshmallow.unmarshal(rev)
+        data['username'] = rev.user_id.name
+        del data['user_id']
+    
+        data['images'] = get_images(rev.id)
+        upvotes, downvotes = get_votes_cache(review_id)
+        data['upvotes'] = upvotes
+        data['downvotes'] = downvotes
+
+        review_list.append(data)
+
+    
+    return {
+        total_records: reviews_count,
+        page_size: limit,
+        page_no: offset,
+        reviews: review_list
+        }
+
+        
+
+
+
+
+
+        
+
+
+
+ 

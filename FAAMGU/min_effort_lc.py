@@ -10,12 +10,10 @@ class Solution:
 
         keys = sorted(diff_dict.keys())
 
-        print(diff_dict)
         new_list = []
         for i in range(len(keys)-1, -1, -1):
             new_list += diff_dict[keys[i]]
 
-        print(new_list)
         total_energy = new_list[0][1]
         left_energy = new_list[0][1]
         for item in new_list:
